@@ -1,0 +1,9 @@
+<?xml version="1.0" standalone="no"?>
+<GuidMap>
+  <!--玩家GUID - 玩家兑换时间-->
+  <Costomer Guid="1" Time="5/18/2017 5:57:12 PM" />
+  <Costomer Guid="2" Time="5/18/2017 5:57:14 PM" />
+  <Costomer Guid="3" Time="5/18/2017 5:57:15 PM" />
+  <Costomer Guid="4" Time="5/18/2017 5:57:17 PM" />
+  <Costomer Guid="5" Time="5/18/2017 5:57:18 PM" />
+</GuidMap>

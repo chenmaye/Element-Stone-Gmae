@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml;
 
 public class main : MonoBehaviour {
 
@@ -24,8 +26,7 @@ public class main : MonoBehaviour {
     void Start () {
         _guidDic = new Dictionary<string, string>();
         _Text.text = System.Guid.NewGuid().ToString();
-        _add.SetActive(false);
-        _delete.SetActive(false);
+        xmlload();
     }
 	
 	// Update is called once per frame
@@ -48,8 +49,7 @@ public class main : MonoBehaviour {
         else
         {
             _guidFounding.text = "GUID NOT FOUND IN DATA BASE";
-            _add.SetActive(true);
-        }
+        }      
     }
 
     public void Add()
@@ -62,8 +62,7 @@ public class main : MonoBehaviour {
         }
         
         _guidDic.Add(tes, System.DateTime.Now.ToString());
-        _add.SetActive(false);
-        _delete.SetActive(true);
+        _guidFounding.text = "ADD SUCCESS";
     }
 
     public void Delete()
@@ -77,6 +76,55 @@ public class main : MonoBehaviour {
 
         _guidDic.Remove(tes);     
         _guidDic.Add(tes, System.DateTime.Now.ToString());
-        _delete.SetActive(false);
+        _guidFounding.text = "DELETE SUCCESS";
+    }
+
+    public void xmlload()
+    {
+        XmlTextReader myXmlTextReader = new XmlTextReader(@"Database\GuidMap.xml");
+
+        while (myXmlTextReader.Read())
+        {               
+             if (myXmlTextReader.NodeType == XmlNodeType.Element)
+             {
+                   if (myXmlTextReader.Name == "Costomer")
+                   {
+                        _guidDic.Add(myXmlTextReader.GetAttribute(0), myXmlTextReader.GetAttribute(1));
+                   }
+             }               
+        }
+    }
+
+    public void xmlsave()
+    {
+        if (Directory.Exists("Database") == false)//如果不存在就创建Database文件夹;
+        {
+            Directory.CreateDirectory("Database");
+        }
+
+        XmlTextWriter myXmlTextWriter = new XmlTextWriter(@"Database\GuidMap.xml", null);
+        myXmlTextWriter.Formatting = Formatting.Indented; 
+        myXmlTextWriter.WriteStartDocument(false);
+        myXmlTextWriter.WriteStartElement("GuidMap");
+          
+        myXmlTextWriter.WriteComment("玩家GUID - 玩家兑换时间");
+
+        foreach (KeyValuePair<string, string> kv in _guidDic)
+        {
+            myXmlTextWriter.WriteStartElement("Costomer");
+            myXmlTextWriter.WriteAttributeString("Guid", kv.Key);
+            myXmlTextWriter.WriteAttributeString("Time", kv.Value);
+
+            myXmlTextWriter.WriteEndElement();
+        }
+
+        myXmlTextWriter.WriteEndElement();    
+        myXmlTextWriter.Flush();
+        myXmlTextWriter.Close();
+    }
+
+    private void OnApplicationQuit()
+    {
+        xmlsave();
     }
 }
