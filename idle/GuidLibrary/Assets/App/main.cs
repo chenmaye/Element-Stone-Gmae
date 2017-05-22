@@ -7,8 +7,8 @@ using System.Xml;
 
 public class main : MonoBehaviour {
 
-    [SerializeField]
-    private Text _Text;
+    //[SerializeField]
+    //private Text _Text;
     [SerializeField]
     private Dictionary<string, string> _guidDic;
     [SerializeField]
@@ -25,7 +25,10 @@ public class main : MonoBehaviour {
     // Use this for initialization
     void Start () {
         _guidDic = new Dictionary<string, string>();
-        _Text.text = System.Guid.NewGuid().ToString();
+
+        //string ANDROID_ID = Secure.getString(getContext().getContentResolver(), Secure.ANDROID_ID)
+
+        //_Text.text = System.Guid.NewGuid().ToString();
         xmlload();
     }
 	
